@@ -12,4 +12,9 @@ declare global {
 
 // This will be sourced from Vercel's environment variables at build time.
 // For local development, you can create a .env.local file.
-export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://813eec65-23fd-4b03-bd66-cc44d76e753f-00-2bz3a8nxcmmcg.sisko.replit.dev:8080';
+export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || (
+  // In development, use localhost; in production, use relative path for same-domain deployment
+  typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+    ? 'http://localhost:8080'
+    : `${window.location.protocol}//${window.location.hostname}:8080`
+);

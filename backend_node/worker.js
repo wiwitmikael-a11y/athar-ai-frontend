@@ -1,6 +1,8 @@
 const { connectDB } = require("./db");
-const fetch = require("node-fetch");
 const crypto = require("crypto");
+
+// Use native fetch in Node.js 18+ or fallback to node-fetch
+const fetch = globalThis.fetch || require("node-fetch");
 
 const POLL_INTERVAL = parseInt(process.env.WORKER_POLL_INTERVAL_MS || "1000", 10);
 const CACHE_TTL = parseInt(process.env.CACHE_TTL_SECONDS || "3600", 10);

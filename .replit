@@ -56,3 +56,8 @@ externalPort = 8080
 [[ports]]
 localPort = 38441
 externalPort = 3000
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["bash", "-c", "cd backend_node && MONGO_URI=\"\" HF_API_KEY=$HF_API_KEY node server.js & npm run preview"]
+build = ["npm", "run", "build"]
