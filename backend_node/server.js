@@ -27,7 +27,7 @@ app.get("/stats", async (req,res)=>{
   } catch(e){ res.status(500).json({ error: "internal error" }); }
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3001;
 (async ()=>{
   try {
     await connectDB();
