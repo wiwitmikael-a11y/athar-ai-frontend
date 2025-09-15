@@ -1,0 +1,1 @@
+// This file is obsolete. The main App component is located at /src/App.tsx.
