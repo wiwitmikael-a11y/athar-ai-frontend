@@ -37,13 +37,13 @@ outputType = "webview"
 name = "Backend"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd backend_node && MONGO_URI=\"\" HF_API_KEY=$HF_API_KEY node server.js"
-waitForPort = 8080
-
 [workflows.workflow.metadata]
 outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend_node && HF_API_KEY=$HF_API_KEY MONGO_URI=$MONGO_URI node server.js"
+waitForPort = 8080
 
 [[ports]]
 localPort = 5000
@@ -54,8 +54,8 @@ localPort = 8080
 externalPort = 8080
 
 [[ports]]
-localPort = 38239
-externalPort = 3001
+localPort = 33987
+externalPort = 3000
 
 [deployment]
 deploymentTarget = "autoscale"

@@ -10,6 +10,7 @@ const inferenceRouter = require("./routes/inference");
 const worker = require("./worker");
 
 const app = express();
+app.set('trust proxy', true); // For Replit proxy
 app.use(helmet());
 app.use(cors());
 app.use(bodyParser.json({ limit:"200kb" }));
