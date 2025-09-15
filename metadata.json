@@ -1,0 +1,5 @@
+{
+  "name": "AtharAI Chatbot",
+  "description": "An open-source AI assistant for chat and image generation, powered by Hugging Face models. This application features a React frontend that communicates with a Node.js backend to queue and process AI tasks.",
+  "requestFramePermissions": []
+}
