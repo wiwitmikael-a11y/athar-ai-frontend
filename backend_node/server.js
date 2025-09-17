@@ -10,7 +10,6 @@ const inferenceRouter = require("./routes/inference");
 const worker = require("./worker");
 
 const app = express();
-app.set('trust proxy', true); // For Replit proxy
 app.use(helmet());
 app.use(cors());
 app.use(bodyParser.json({ limit:"200kb" }));
@@ -28,7 +27,7 @@ app.get("/stats", async (req,res)=>{
   } catch(e){ res.status(500).json({ error: "internal error" }); }
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8080;
 (async ()=>{
   try {
     await connectDB();

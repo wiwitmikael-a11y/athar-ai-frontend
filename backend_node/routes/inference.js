@@ -8,76 +8,23 @@ function shortId(){ return crypto.randomBytes(6).toString("hex"); }
 
 router.post("/", async (req,res)=>{
   const db = await connectDB();
-  const { prompt="", parameters={}, quality="default" } = req.body; // Removed model parameter for security
+  const { model="distilgpt2", prompt="", parameters={} } = req.body;
   if (!prompt) return res.status(400).json({ error: "prompt required" });
   if (prompt.length > 20000) return res.status(400).json({ error: "prompt too long" });
 
-  // Secure allowlisted models only - prevent arbitrary model access
-  const ALLOWED_TEXT_MODELS = {
-    default: "mistralai/Mistral-7B-Instruct-v0.3", 
-    fast: "microsoft/DialoGPT-medium",
-    quality: "meta-llama/Meta-Llama-3-8B-Instruct",
-    reasoning: "mistralai/Mistral-7B-Instruct-v0.3"
-  };
-  
-  // Security: Only use quality parameter, ignore client-supplied model
-  const selectedModel = ALLOWED_TEXT_MODELS[quality] || ALLOWED_TEXT_MODELS.default;
-  const job = { 
-    model: selectedModel, 
-    prompt, 
-    parameters, 
-    status: "pending", 
-    createdAt: new Date(), 
-    type: "text", 
-    quality,
-    jobTag: shortId() 
-  };
-  
+  const job = { model, prompt, parameters, status: "pending", createdAt: new Date(), type: "text", jobTag: shortId() };
   const r = await db.collection("jobs").insertOne(job);
-  res.status(202).json({ 
-    ok: true, 
-    jobId: r.insertedId.toString(), 
-    jobTag: job.jobTag,
-    model: selectedModel,
-    quality 
-  });
+  res.status(202).json({ ok:true, jobId: r.insertedId.toString(), jobTag: job.jobTag });
 });
 
 router.post("/image", async (req,res)=>{
   const db = await connectDB();
-  const { prompt="", parameters={}, quality="fast" } = req.body; // Removed model parameter for security
+  const { model="runwayml/stable-diffusion-v1-5", prompt="", parameters={} } = req.body;
   if (!prompt) return res.status(400).json({ error: "prompt required" });
-  if (prompt.length > 2000) return res.status(400).json({ error: "image prompt too long" });
 
-  // Secure allowlisted image models only - prevent arbitrary model access  
-  const ALLOWED_IMAGE_MODELS = {
-    fast: "black-forest-labs/FLUX.1-schnell",
-    quality: "black-forest-labs/FLUX.1-dev", 
-    stable: "stabilityai/stable-diffusion-xl-base-1.0",
-    classic: "runwayml/stable-diffusion-v1-5"
-  };
-  
-  // Security: Only use quality parameter, ignore client-supplied model
-  const selectedModel = ALLOWED_IMAGE_MODELS[quality] || ALLOWED_IMAGE_MODELS.fast;
-  const job = { 
-    model: selectedModel, 
-    prompt, 
-    parameters, 
-    status: "pending", 
-    createdAt: new Date(), 
-    type: "image", 
-    quality,
-    jobTag: shortId() 
-  };
-  
+  const job = { model, prompt, parameters, status: "pending", createdAt: new Date(), type: "image", jobTag: shortId() };
   const r = await db.collection("jobs").insertOne(job);
-  res.status(202).json({ 
-    ok: true, 
-    jobId: r.insertedId.toString(), 
-    jobTag: job.jobTag,
-    model: selectedModel,
-    quality 
-  });
+  res.status(202).json({ ok:true, jobId: r.insertedId.toString(), jobTag: job.jobTag });
 });
 
 router.get("/status/:jobId", async (req,res)=>{
